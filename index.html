@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistencia QR - IE Ricardo Palma</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Sistema de Asistencia QR</h1>
+    <p>IE Ricardo Palma · DNI + nombre + grado + sección</p>
+  </header>
+
+  <main class="container">
+    <!-- Contadores en tarjetas superiores -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h2 id="total-estudiantes">0</h2>
+        <p>Estudiantes</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="total-registrados">0</h2>
+        <p>Registrados</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="total-sin-registrar">0</h2>
+        <p>Sin registrar</p>
+      </div>
+    </section>
+
+    <!-- Sección 1: Cargar nómina Excel -->
+    <section class="card-box">
+      <h2>1. Cargar nómina Excel</h2>
+      <div class="drop-area">
+        <input type="file" id="excel-input" accept=".xlsx, .xls">
+        <p class="info-text">El Excel debe contener las columnas DNI, ESTUDIANTE, GRADO y SECCIÓN. La nómina quedará guardada en este dispositivo.</p>
+        <button id="btn-borrar-nomina" class="btn btn-danger">Borrar nómina guardada</button>
+        <button id="btn-generar-qr" class="btn btn-secondary" style="margin-left: 10px;">🖨️ Generar Carnets QR</button>
+      </div>
+    </section>
+
+    <!-- Sección 2: Escanear QR -->
+    <section class="card-box">
+      <h2>2. Escanear QR</h2>
+      <div class="btn-group">
+        <button id="btn-abrir-camara" class="btn btn-dark-blue">Abrir cámara</button>
+        <button id="btn-cerrar-camara" class="btn btn-slate">Cerrar cámara</button>
+      </div>
+
+      <div id="reader"></div>
+
+      <div class="manual-section">
+        <p>También puede escribir el DNI:</p>
+        <input type="text" id="dni-manual" class="input-dni" placeholder="Escriba DNI y presione Enter">
+      </div>
+    </section>
+
+    <!-- Sección 3: Registro de hoy -->
+    <section class="card-box">
+      <h2>3. Registro de hoy</h2>
+      <p class="info-text">Horario: hasta las 7:50 a. m. = ASISTIÓ · desde las 7:51 a. m. = TARDE.</p>
+      <div class="btn-group">
+        <button id="btn-cerrar-dia" class="btn btn-dark-blue">Cerrar día y descargar Excel</button>
+        <button id="btn-descargar-excel" class="btn btn-slate">Descargar Excel ahora</button>
+        <button id="btn-reiniciar-dia" class="btn btn-danger">Reiniciar día</button>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Estudiante</th>
+              <th>Grado</th>
+              <th>Sección</th>
+              <th>Estado</th>
+              <th>Fecha</th>
+              <th>Hora de ingreso</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-registros">
+            <!-- Filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Sección 4: Historial diario -->
+    <section class="card-box">
+      <h2>4. Historial diario</h2>
+      <p class="info-text">Los registros quedan guardados por fecha en este dispositivo. Puede volver a descargar el Excel de cualquier día guardado.</p>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Registros</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-historial">
+            <!-- Filas generadas por JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Carnets QR creados -->
+    <section class="card-box" id="seccion-carnets" style="display: none;">
+      <h2>Carnets con Código QR</h2>
+      <button onclick="window.print()" class="btn btn-dark-blue" style="margin-bottom: 15px;">🖨️ Imprimir Carnets</button>
+      <div id="contenedor-carnets" class="grid-carnets"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
