@@ -249,7 +249,7 @@ function iniciarCamara() {
   html5QrcodeScanner = new Html5Qrcode("reader");
   html5QrcodeScanner.start(
     { facingMode: "environment" },
-    { fps: 10, qrbox: { width: 220, height: 220 } },
+    { fps: 30, qrbox: { width: 300, height: 300 }, aspectRatio: 1.0 };
     (decodedText) => {
       registrarAsistencia(decodedText);
     },
